@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>For Roshni 💖</title>
+
 <style>
 body {
   margin: 0;
@@ -17,10 +18,12 @@ body {
 
 /* Floating hearts */
 .heart {
-  position: absolute;
+  position: fixed;
   font-size: 20px;
   animation: float 8s linear infinite;
-  opacity: 0.7;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 1;
 }
 
 @keyframes float {
@@ -76,34 +79,31 @@ button:hover {
 }
 </style>
 </head>
+
 <body>
 
 <div class="container">
   <h1>Roshni, will you be my Valentine? 💌</h1>
 
-  <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+  <form action="https://formspree.io/f/mojlvler" method="POST">
     <input type="hidden" name="response" value="YES">
-    <button type="submit" class="yes" onclick="celebrate()">YES 💖</button>
+    <button type="submit" class="yes">YES 💖</button>
   </form>
 
-  <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+  <form action="https://formspree.io/f/mojlvler" method="POST">
     <input type="hidden" name="response" value="NO">
     <button type="submit" class="no">No 😶</button>
   </form>
 </div>
 
 <script>
-function celebrate() {
-  alert("She said YESSSS 💖🎉");
-}
-<script>
 function createHeart() {
   const heart = document.createElement("div");
   heart.className = "heart";
   heart.innerHTML = "💖";
   heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 10 + "px";
-  heart.style.animationDuration = Math.random() * 5 + 5 + "s";
+  heart.style.fontSize = Math.random() * 20 + 15 + "px";
+  heart.style.animationDuration = Math.random() * 4 + 4 + "s";
   document.body.appendChild(heart);
 
   setTimeout(() => {
@@ -111,9 +111,8 @@ function createHeart() {
   }, 8000);
 }
 
-setInterval(createHeart, 300);
+setInterval(createHeart, 200);
 </script>
 
 </body>
 </html>
-
