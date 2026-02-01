@@ -17,7 +17,7 @@ body {
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
 }
 
-/* Floating hearts from all sides */
+/* Floating hearts */
 .heart {
   position: fixed;
   font-size: 18px;
@@ -71,10 +71,6 @@ button {
   background: #ccc;
 }
 
-button:hover {
-  transform: scale(1.05);
-}
-
 #note {
   margin-top: 20px;
   font-size: 18px;
@@ -92,18 +88,11 @@ button:hover {
 
 <body>
 
-<div class="container" id="card">
+<div class="container">
   <h1>Roshni, will you be my Valentine? 💌</h1>
 
-  <form id="yesForm" action="https://formspree.io/f/mojlvler" method="POST">
-    <input type="hidden" name="response" value="YES">
-    <button type="submit" class="yes" id="yesBtn">YES 💖</button>
-  </form>
-
-  <form action="https://formspree.io/f/mojlvler" method="POST">
-    <input type="hidden" name="response" value="NO">
-    <button type="submit" class="no">No 😶</button>
-  </form>
+  <button class="yes" onclick="handleResponse('YES')">YES 💖</button>
+  <button class="no" onclick="handleResponse('NO')">No 😶</button>
 
   <div id="note">
     You just made me the happiest person alive 💖✨  
@@ -111,11 +100,10 @@ button:hover {
   </div>
 </div>
 
-<!-- Confetti library -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-/* Fast hearts from all sides */
+// Floating hearts from all sides
 function createHeart() {
   const heart = document.createElement("div");
   heart.className = "heart";
@@ -124,22 +112,22 @@ function createHeart() {
   const side = Math.floor(Math.random() * 4);
   let startX, startY, dx, dy;
 
-  if (side === 0) { // top
+  if (side === 0) {
     startX = Math.random() * window.innerWidth;
     startY = -20;
     dx = (Math.random() - 0.5) * 300 + "px";
     dy = window.innerHeight + 100 + "px";
-  } else if (side === 1) { // bottom
+  } else if (side === 1) {
     startX = Math.random() * window.innerWidth;
     startY = window.innerHeight + 20;
     dx = (Math.random() - 0.5) * 300 + "px";
     dy = -window.innerHeight - 100 + "px";
-  } else if (side === 2) { // left
+  } else if (side === 2) {
     startX = -20;
     startY = Math.random() * window.innerHeight;
     dx = window.innerWidth + 100 + "px";
     dy = (Math.random() - 0.5) * 300 + "px";
-  } else { // right
+  } else {
     startX = window.innerWidth + 20;
     startY = Math.random() * window.innerHeight;
     dx = -window.innerWidth - 100 + "px";
@@ -153,15 +141,26 @@ function createHeart() {
   heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
 
   document.body.appendChild(heart);
-
   setTimeout(() => heart.remove(), 5000);
 }
 
 setInterval(createHeart, 150);
 
-/* Fireworks + note on YES */
-document.getElementById("yesForm").addEventListener("submit", function() {
-  setTimeout(() => {
+// Submit to Formspree WITHOUT redirect
+function handleResponse(answer) {
+
+  fetch("https://formspree.io/f/mojlvler", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ response: answer })
+  });
+
+  if (answer === "YES") {
+
+    document.getElementById("note").style.display = "block";
+
     const duration = 2000;
     const end = Date.now() + duration;
 
@@ -183,10 +182,12 @@ document.getElementById("yesForm").addEventListener("submit", function() {
         requestAnimationFrame(frame);
       }
     })();
+  }
 
-    document.getElementById("note").style.display = "block";
-  }, 100);
-});
+  if (answer === "NO") {
+    alert("Hmm... I’ll try again tomorrow 😌");
+  }
+}
 </script>
 
 </body>
