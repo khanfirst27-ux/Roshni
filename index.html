@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Roshni ❤️</title>
+<title>Office Survey</title>
 
 <style>
 body {
@@ -14,11 +14,48 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #5a0000, #8b0000);
+  background: linear-gradient(135deg, #222, #444);
   transition: background 1s ease;
 }
 
-/* floating hearts + roses */
+.container {
+  position: relative;
+  background: white;
+  padding: 30px 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  z-index: 10;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 50px;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primary { background: #444; color: white; }
+.yes { background: #c4002f; color: white; }
+.no { background: #999; color: white; }
+
+.hidden { display: none; }
+
 .float {
   position: fixed;
   font-size: 18px;
@@ -35,79 +72,68 @@ body {
   }
 }
 
-.container {
-  position: relative;
-  background: white;
-  padding: 30px 20px;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  text-align: center;
-  z-index: 10;
-  width: 90%;
-  max-width: 400px;
-  transition: transform 0.4s ease;
-}
-
-h1 {
-  font-size: 22px;
-  margin-bottom: 25px;
-}
-
-button {
-  width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  font-size: 20px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.yes {
-  background: #c4002f;
-  color: white;
-}
-
-.no {
-  background: #999;
-  color: white;
-}
-
 #note {
   margin-top: 20px;
   font-size: 18px;
   color: #c4002f;
   display: none;
-  animation: fadeIn 1s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="card">
-  <h1>Roshni, will you be my Valentine? ❤️</h1>
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_6d55a4f0c4.mp3?filename=romantic-background-ambient-124008.mp3" type="audio/mpeg">
+</audio>
 
-  <button class="yes" onclick="handleResponse('YES')">YES 💖</button>
+<div class="container" id="surveyPage">
+  <h2>AI Behavioural Survey</h2>
+  <p>We are training an AI model for personality mapping.</p>
+
+  <input type="text" id="name" placeholder="Your Name" required>
+  <input type="number" id="age" placeholder="Your Age" required>
+  <input type="text" id="fun" placeholder="If you were a dessert, what would you be?" required>
+
+  <button class="primary" onclick="goToValentine()">Next</button>
+</div>
+
+<div class="container hidden" id="valentinePage">
+  <h2 id="valentineTitle"></h2>
+
+  <button class="yes" onclick="handleYes()">YES ❤️</button>
   <button class="no" id="noBtn" onclick="handleNo()">No 😶</button>
 
   <div id="note">
     You just made me the happiest person alive ❤️🌹  
-    I promise unlimited smiles, protection, and forever love.
+    This AI experiment was actually my heart.
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-// Floating hearts + roses from all sides
+const music = document.getElementById("bgMusic");
+
+function goToValentine() {
+  const name = document.getElementById("name").value.trim();
+  if (!name) return alert("Please complete the survey 😌");
+
+  music.volume = 0.4;
+  music.play();
+
+  document.body.style.background = "linear-gradient(135deg, #5a0000, #8b0000)";
+  document.getElementById("surveyPage").classList.add("hidden");
+  document.getElementById("valentinePage").classList.remove("hidden");
+
+  document.getElementById("valentineTitle").innerText =
+    name + ", will you be my Valentine? ❤️";
+}
+
+/* Floating hearts + roses */
 function createFloat() {
+  if (document.getElementById("valentinePage").classList.contains("hidden")) return;
+
   const el = document.createElement("div");
   el.className = "float";
   el.innerHTML = Math.random() > 0.5 ? "❤️" : "🌹";
@@ -115,22 +141,22 @@ function createFloat() {
   const side = Math.floor(Math.random() * 4);
   let startX, startY, dx, dy;
 
-  if (side === 0) { // top
+  if (side === 0) {
     startX = Math.random() * window.innerWidth;
     startY = -20;
     dx = (Math.random() - 0.5) * 400 + "px";
     dy = window.innerHeight + 100 + "px";
-  } else if (side === 1) { // bottom
+  } else if (side === 1) {
     startX = Math.random() * window.innerWidth;
     startY = window.innerHeight + 20;
     dx = (Math.random() - 0.5) * 400 + "px";
     dy = -window.innerHeight - 100 + "px";
-  } else if (side === 2) { // left
+  } else if (side === 2) {
     startX = -20;
     startY = Math.random() * window.innerHeight;
     dx = window.innerWidth + 100 + "px";
     dy = (Math.random() - 0.5) * 400 + "px";
-  } else { // right
+  } else {
     startX = window.innerWidth + 20;
     startY = Math.random() * window.innerHeight;
     dx = -window.innerWidth - 100 + "px";
@@ -149,41 +175,41 @@ function createFloat() {
 
 setInterval(createFloat, 120);
 
-
-// YES button logic (NO redirect, background fire, note)
-function handleResponse(answer) {
+/* MASSIVE FIREWORKS */
+function handleYes() {
 
   fetch("https://formspree.io/f/mojlvler", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ response: answer })
+    body: JSON.stringify({ response: "YES" })
   });
 
-  if (answer === "YES") {
-    document.body.style.background = "linear-gradient(135deg, #3a0000, #7a0000)";
-    document.getElementById("note").style.display = "block";
+  document.getElementById("note").style.display = "block";
+  music.volume = 0.9;
 
-    const duration = 2500;
-    const end = Date.now() + duration;
+  const duration = 4000;
+  const end = Date.now() + duration;
 
-    (function frame() {
-      confetti({
-        particleCount: 6,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-      if (Date.now() < end) requestAnimationFrame(frame);
-    })();
-  }
+  (function frame() {
+
+    confetti({ particleCount: 50, spread: 70, origin: { x: 0.5, y: 0.6 } });
+    confetti({ particleCount: 30, angle: 60, spread: 80, origin: { x: 0 } });
+    confetti({ particleCount: 30, angle: 120, spread: 80, origin: { x: 1 } });
+    confetti({ particleCount: 25, spread: 100, origin: { x: Math.random(), y: 0 } });
+    confetti({
+      particleCount: 40,
+      spread: 120,
+      origin: { x: Math.random(), y: Math.random() - 0.2 }
+    });
+
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
 }
 
-
-// NO button emotional damage system
 let noClicks = 0;
-const noBtn = document.getElementById("noBtn");
-
 function handleNo() {
   noClicks++;
+  const btn = document.getElementById("noBtn");
 
   fetch("https://formspree.io/f/mojlvler", {
     method: "POST",
@@ -192,19 +218,19 @@ function handleNo() {
   });
 
   if (noClicks === 1) {
-    noBtn.style.transform = "scale(0.8)";
-    noBtn.innerText = "Are you sure? 🥺";
+    btn.style.transform = "scale(0.8)";
+    btn.innerText = "Are you sure? 🥺";
   }
   else if (noClicks === 2) {
-    noBtn.style.transform = "scale(0.6)";
-    noBtn.innerText = "Think again 😭";
+    btn.style.transform = "scale(0.6)";
+    btn.innerText = "Think again 😭";
   }
   else {
     const x = Math.random() * (window.innerWidth - 120);
     const y = Math.random() * (window.innerHeight - 60);
-    noBtn.style.position = "fixed";
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    btn.style.position = "fixed";
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
   }
 }
 </script>
